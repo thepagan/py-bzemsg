@@ -22,7 +22,7 @@ def main():
     parser.add_argument("command", action="store", help="Use command 'sendmsg' or 'checkmsgs' to send and receive messages.")
     parser.add_argument("-sendfrom", action="store", help="Address (zaddr or taddr) to send message from. If none specified, finds taddr with unspent.")
     parser.add_argument("-sendto", action="store", help="Address (zaddr) to send message to.")
-    parser.add_argument("-txval", action="store", default=0.0001, help="Specify the amount of ZEC to send with messages.")
+    parser.add_argument("-txval", action="store", default=0.0001, help="Specify the amount of BZE to send with messages.")
     parser.add_argument("-msg", action="store", help="Send a message.")
     parser.add_argument("-minconf", action="store", help="Set a number of minimum confirmations on messages checked (default=1)")
     args = parser.parse_args()

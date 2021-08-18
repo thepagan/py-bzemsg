@@ -84,7 +84,7 @@ class BaseProxy(object):
     def __init__(self, network=None,
                  service_url=None,
                  service_port=None,
-                 zcash_conf_file=None,
+                 bzedge_conf_file=None,
                  timeout=DEFAULT_HTTP_TIMEOUT):
 
         # Create a dummy connection early on so if __init__() fails prior to
@@ -101,17 +101,17 @@ class BaseProxy(object):
             raise Exception("Please specify network='testnet' or 'mainnet'")
 
         if service_url is None:
-            # Figure out the path to the zcash.conf file
-            if zcash_conf_file is None:
+            # Figure out the path to the bzedge.conf file
+            if bzedge_conf_file is None:
                 if platform.system() == 'Windows':
-                    zcash_conf_file = os.path.join(os.environ['APPDATA'], 'Zcash')
+                    bzedge_conf_file = os.path.join(os.environ['APPDATA'], 'Zcash')
                 else:
-                    zcash_conf_file = os.path.expanduser('~/.zcash')
-                zcash_conf_file = os.path.join(zcash_conf_file, 'zcash.conf')
+                    bzedge_conf_file = os.path.expanduser('~/.bzedge')
+                bzedge_conf_file = os.path.join(bzedge_conf_file, 'bzedge.conf')
 
-            # Extract contents of zcash.conf to build service_url
-            with open(zcash_conf_file, 'r') as fd:
-                # zcash accepts empty rpcuser, not specified in zcash_conf_file
+            # Extract contents of bzedge.conf to build service_url
+            with open(bzedge_conf_file, 'r') as fd:
+                # bzedge accepts empty rpcuser, not specified in bzedge_conf_file
                 conf = {'rpcuser': ""}
                 for line in fd.readlines():
                     if '#' in line:
@@ -127,7 +127,7 @@ class BaseProxy(object):
                 conf['rpchost'] = conf.get('rpcconnect', 'localhost')
 
                 if 'rpcpassword' not in conf:
-                    raise ValueError('The value of rpcpassword not specified in the configuration file: %s' % zcash_conf_file)
+                    raise ValueError('The value of rpcpassword not specified in the configuration file: %s' % bzedge_conf_file)
 
                 service_url = ('%s://%s:%s@%s:%d' %
                     ('http',
@@ -201,9 +201,9 @@ class BaseProxy(object):
 
 
 class Proxy(BaseProxy):
-    """Proxy to a zcash RPC service
+    """Proxy to a bzedge RPC service
 
-    Unlike ``RawProxy``, data is passed as ``zcash.core`` objects or packed
+    Unlike ``RawProxy``, data is passed as ``bzedge.core`` objects or packed
     bytes, rather than JSON or hex strings. Not all methods are implemented
     yet; you can use ``call`` to access missing ones in a forward-compatible
     way. Assumes Zcash version >= v1.0.0
@@ -212,18 +212,18 @@ class Proxy(BaseProxy):
     def __init__(self,
                  service_url=None,
                  service_port=None,
-                 zcash_conf_file=None,
+                 bzedge_conf_file=None,
                  timeout=DEFAULT_HTTP_TIMEOUT,
                  **kwargs):
         """Create a proxy object
 
         If ``service_url`` is not specified, the username and password are read
-        out of the file ``zcash_conf_file``. If ``zcash_conf_file`` is not
-        specified, ``~/.zcash/zcash.conf`` or equivalent is used by
+        out of the file ``bzedge_conf_file``. If ``bzedge_conf_file`` is not
+        specified, ``~/.bzedge/bzedge.conf`` or equivalent is used by
         default.  The default port is set according to the chain parameters in
         use: mainnet, testnet, or regtest.
 
-        Usually no arguments to ``Proxy()`` are needed; the local zcashd will
+        Usually no arguments to ``Proxy()`` are needed; the local bzedged will
         be used.
 
         ``timeout`` - timeout in seconds before the HTTP interface times out
@@ -231,7 +231,7 @@ class Proxy(BaseProxy):
 
         super(Proxy, self).__init__(service_url=service_url,
                                     service_port=service_port,
-                                    zcash_conf_file=zcash_conf_file,
+                                    bzedge_conf_file=bzedge_conf_file,
                                     timeout=timeout,
                                     **kwargs)
 
@@ -306,7 +306,7 @@ class Proxy(BaseProxy):
         2. "amounts"             (array, required) An array of json objects representing the amounts to send.
             [{
               "address":address  (string, required) The address is a taddr or zaddr
-              "amount":amount    (numeric, required) The numeric amount in ZEC is the value
+              "amount":amount    (numeric, required) The numeric amount in BZE is the value
               "memo":memo        (string, optional) If the address is a zaddr, raw data represented in hexadecimal string format
             }, ... ]
         3. minconf               (numeric, optional, default=1) Only use funds confirmed at least this many times.
