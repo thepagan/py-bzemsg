@@ -2,7 +2,7 @@
 
 # Copyright (C) 2017 arcalinea <arcalinea@z.cash>
 
-from zmsg.rpc import Proxy
+from bzemsg.rpc import Proxy
 import time, sys
 import argparse, textwrap
 from .utils import *
@@ -10,7 +10,7 @@ from .utils import *
 __version__ = "0.1.0"
 
 def main():
-    zmsg = Zmsg()
+    bzemsg = BZEmsg()
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
         description=textwrap.dedent('''\
                 Usage:
@@ -31,14 +31,14 @@ def main():
             print("\nError: You must include a recipient z-address and message with the command 'sendmsg'.\n")
             print(parser.print_help())
         elif args.sendfrom == None:
-            zmsg.send_msg(None, args.sendto, args.txval, args.msg)
+            bzemsg.send_msg(None, args.sendto, args.txval, args.msg)
         else:
-            zmsg.send_msg(args.sendfrom, args.sendto, args.txval, args.msg)
+            bzemsg.send_msg(args.sendfrom, args.sendto, args.txval, args.msg)
     elif args.command == "checkmsgs":
         if args.minconf == None:
-            msgs = zmsg.check_msgs()
+            msgs = bzemsg.check_msgs()
         else:
-            msgs = zmsg.check_msgs(args.minconf)
+            msgs = bzemsg.check_msgs(args.minconf)
         for zaddr in msgs:
             print("\n" + "=" * 80)
             print("Messages received at", zaddr, "\n")
@@ -47,12 +47,12 @@ def main():
                 print("Message:", msg['memo'])
                 print('-' * 80)
     elif args.command == "test":
-        zmsg.check_msgs()
+        bzemsg.check_msgs()
     else:
         print("Invalid command, please use sendmsg or checkmsgs to send and receive messages.")
 
 
-class Zmsg(object):
+class BZEmsg(object):
     def __init__(self, network='testnet'):
         self.rpc = Proxy(network=network)
 
