@@ -1,2 +1,2 @@
-from .zmsg import main
+from .bzemsg import main
 main()

@@ -1,6 +1,6 @@
-from zmsg import *
+from bzemsg import *
 
-z = Zmsg()
+z = BZEmsg()
 msgs = z.check_msgs()
 
 print("ALL MESSAGES", msgs)
